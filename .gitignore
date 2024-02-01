@@ -1,5 +1,9 @@
 # Visual Studio 2015 user specific files
 .vs/
+.vsconfig
+
+.idea/
+Plugins/Developer/RiderLink/
 
 # Compiled Object files
 *.slo
