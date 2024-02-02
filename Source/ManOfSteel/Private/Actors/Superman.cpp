@@ -51,7 +51,6 @@ void ASuperman::AddCrosshair() {
 		CrosshairWidget = CreateWidget<UUserWidget>(GetController<APlayerController>(), CrosshairWidgetClass);
 		check(CrosshairWidget.Get());
 		CrosshairWidget->AddToViewport();
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, "Crosshair Added");
 	}
 }
 
