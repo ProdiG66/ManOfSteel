@@ -159,8 +159,6 @@ private:
 	bool IsSuperheroLanding;
 	bool IsFlying;
 	bool IsAscending;
-
-private:
 	bool IsDescending;
 	bool GoUp;
 
@@ -266,7 +264,9 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool GetIsSuperheroLanding();
 
+	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool GetIsAscending();
+	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool GetIsDescending();
 	bool GetGoUp();
 	void SetIsAscending(bool Value);
