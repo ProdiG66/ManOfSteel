@@ -1,7 +1,8 @@
 # Man of Steel
-
+<span>
 <img src="/Documentation/0.jpg" width="260">
 <img src="/Documentation/1.png" width="260">
+</span>
 
 Welcome to Man of Steel, an Unreal Engine prototype featuring Superman mechanics such as flight, heat vision, superhero landing, flight leaning, and basic combat. This project aims to showcase various aspects of Superman's abilities within a game environment.
 
