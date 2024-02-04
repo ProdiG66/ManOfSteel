@@ -17,10 +17,14 @@ class UEnhancedInputLocalPlayerSubsystem;
 
 ASuperman::ASuperman() {
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision"));
-	CapsuleCollider->SetVisibility(false);
+	CapsuleCollider->SetVisibility(true);
+	CapsuleCollider->SetHiddenInGame(true);
+	CapsuleCollider->SetCapsuleHalfHeight(100);
+	CapsuleCollider->SetCapsuleRadius(40);
 	PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("Physics Constraint"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(this->GetCapsuleComponent());
+	SpringArm->bUsePawnControlRotation = true;
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	TargetLock = CreateDefaultSubobject<UTargetLock>(TEXT("Target Lock"));

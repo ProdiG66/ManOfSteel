@@ -37,7 +37,7 @@ protected:
 
 	/** Radius used for scanning targets */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target Lock")
-	float ScanRadius;
+	float ScanRadius = 1000;
 
 	/** Checks for available targets */
 	void CheckForTarget();
@@ -80,5 +80,5 @@ public:
 
 	/** Distance used for scanning targets */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target Lock")
-	float ScanDistance;
+	float ScanDistance = 30000;
 };

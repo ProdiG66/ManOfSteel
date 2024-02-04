@@ -69,7 +69,7 @@ private:
 	float SprintAcceleration = 65536.0;
 
 	UPROPERTY(EditAnywhere, Category = "Flight Parameters")
-	FRotator SprintRotationRate = FRotator(0, 0, 720);
+	FRotator SprintRotationRate = FRotator(0, 720, 0);
 
 	UPROPERTY(EditAnywhere, Category = "Flight Parameters")
 	float HoverFlySpeed = 1500;
@@ -78,7 +78,7 @@ private:
 	float HoverAcceleration = 4096.0;
 
 	UPROPERTY(EditAnywhere, Category = "Flight Parameters")
-	FRotator HoverRotationRate = FRotator(0, 0, 540);
+	FRotator HoverRotationRate = FRotator(0, 540, 0);
 
 	UPROPERTY(EditAnywhere, Category = "Flight Parameters")
 	float FlightBrakingDeceleration = 9000;

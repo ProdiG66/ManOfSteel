@@ -8,12 +8,25 @@
 #include "Components/TargetLock.h"
 #include "Enumerators/EInputDirection.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SlateWrapperTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ABaseHero::ABaseHero() {
+	this->GetCapsuleComponent()->SetCapsuleHalfHeight(96);
+	this->GetCapsuleComponent()->SetCapsuleRadius(36);
+	GetCharacterMovement()->BrakingSubStepTime = 0.030303;
+	GetCharacterMovement()->JumpZVelocity = 1000;
+	GetCharacterMovement()->AirControl = 0.5;
+	GetCharacterMovement()->MaxFlySpeed = 1500;
+	GetCharacterMovement()->BrakingDecelerationFlying = 3500;
+	GetCharacterMovement()->RotationRate = FRotator(0, 540, 0);
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bPushForceScaledToMass = true;
+	bUseControllerRotationYaw = false;
 	PrimaryActorTick.bCanEverTick = true;
 }
 
