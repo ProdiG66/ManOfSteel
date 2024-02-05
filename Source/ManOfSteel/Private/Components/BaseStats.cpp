@@ -84,17 +84,17 @@ void UBaseStats::DodgeEvent(EInputDirection InputDirection) {
 
 UAnimMontage* UBaseStats::GetDodgeMontage(EInputDirection InputDirection) {
 	switch (InputDirection) {
-	case EInputDirection::Up:
-		return DodgeMontages[1];
-	case EInputDirection::Down:
-		return DodgeMontages[2];
-	case EInputDirection::Left:
-		return DodgeMontages[3];
-	case EInputDirection::Right:
-		return DodgeMontages[4];
-	case EInputDirection::None:
-	default:
-		return DodgeMontages[0];
+		case EInputDirection::Up:
+			return DodgeMontages[1];
+		case EInputDirection::Down:
+			return DodgeMontages[2];
+		case EInputDirection::Left:
+			return DodgeMontages[3];
+		case EInputDirection::Right:
+			return DodgeMontages[4];
+		case EInputDirection::None:
+		default:
+			return DodgeMontages[0];
 	}
 }
 
@@ -108,6 +108,14 @@ void UBaseStats::SetIsDodging(bool Value) {
 
 void UBaseStats::SetHasMovementInput(bool Value) {
 	HasMovementInput = Value;
+}
+
+FVector UBaseStats::GetLookAtLocation() {
+	return LookAtLocation;
+}
+
+void UBaseStats::SetLookAtLocation(FVector Value) {
+	LookAtLocation = Value;
 }
 
 bool UBaseStats::GetHasMovementInput() {
@@ -150,21 +158,21 @@ void UBaseStats::DodgeMovementInputDirection(EInputDirection InputDirection) {
 
 		FVector WorldVector;
 		switch (InputDirection) {
-		case EInputDirection::Up:
-			WorldVector = UKismetMathLibrary::GetUpVector(Character->GetControlRotation()) * 0.75f;
-			break;
-		case EInputDirection::Down:
-			WorldVector = UKismetMathLibrary::GetUpVector(Character->GetControlRotation()) * -0.75f;
-			break;
-		case EInputDirection::Left:
-			WorldVector = UKismetMathLibrary::GetRightVector(Character->GetControlRotation()) * -0.75f;
-			break;
-		case EInputDirection::Right:
-			WorldVector = UKismetMathLibrary::GetRightVector(Character->GetControlRotation()) * 0.75f;
-			break;
-		default:
-			WorldVector = FVector::Zero();
-			break;
+			case EInputDirection::Up:
+				WorldVector = UKismetMathLibrary::GetUpVector(Character->GetControlRotation()) * 0.75f;
+				break;
+			case EInputDirection::Down:
+				WorldVector = UKismetMathLibrary::GetUpVector(Character->GetControlRotation()) * -0.75f;
+				break;
+			case EInputDirection::Left:
+				WorldVector = UKismetMathLibrary::GetRightVector(Character->GetControlRotation()) * -0.75f;
+				break;
+			case EInputDirection::Right:
+				WorldVector = UKismetMathLibrary::GetRightVector(Character->GetControlRotation()) * 0.75f;
+				break;
+			default:
+				WorldVector = FVector::Zero();
+				break;
 		}
 		CharacterMovement->AddInputVector(WorldVector * DodgeStrength, false);
 	}

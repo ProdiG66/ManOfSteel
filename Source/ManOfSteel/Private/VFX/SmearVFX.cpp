@@ -26,8 +26,7 @@ void USmearVFX::CreateDMI() {
 	MaterialInstances.Add(Mesh->CreateDynamicMaterialInstance(1));
 }
 
-void USmearVFX::Update(float DeltaTime) {
-	const bool EnableSmear = Combat->GetIsAttacking() && !Flight->GetIsSuperheroLanding();
+void USmearVFX::Update(float DeltaTime, bool IsOn, float TargetAmount) {
 	for (const TWeakObjectPtr<UMaterialInstanceDynamic> MaterialInstancePtr : MaterialInstances) {
 		if (UMaterialInstanceDynamic* MaterialInstance = MaterialInstancePtr.Get()) {
 			if (Combat->GetIsAttacking()) {
@@ -35,14 +34,12 @@ void USmearVFX::Update(float DeltaTime) {
 			}
 			float SmearAmount;
 			if (MaterialInstance->GetScalarParameterValue(TEXT("SmearAmount"), SmearAmount)) {
-				const bool IsFastFlying = Flight->GetIsFlying() && Stats->GetIsSprint();
-				const float TargetAmount = IsFastFlying ? 300 : 100;
 				MaterialInstance->SetScalarParameterValue(
 					"SmearAmount",
 					UKismetMathLibrary::FInterpTo(
 						SmearAmount,
-						EnableSmear ? TargetAmount : 0,
-						EnableSmear ? 0.16 : 0.9,
+						IsOn ? TargetAmount : 0,
+						IsOn ? 0.16 : 0.9,
 						1
 					)
 				);

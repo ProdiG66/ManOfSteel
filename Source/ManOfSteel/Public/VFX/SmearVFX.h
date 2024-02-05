@@ -31,5 +31,5 @@ private:
 	TWeakObjectPtr<UBaseStats> Stats;
 
 public:
-	void Update(float DeltaTime);
+	void Update(float DeltaTime, bool IsOn, float TargetAmount = 100);
 };

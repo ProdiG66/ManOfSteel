@@ -117,27 +117,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "VFX")
 	FName FlightTrailAttachPointName = FName("pelvis");
 
-	//Aiming
-	FVector LookAtLocation;
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	FVector DefaultLookAtLocationZ = FVector(0, 0, -2000);
-
 	//Camera
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	FVector AimingSocketOffset = FVector(0, 100, 20);
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	FVector DefaultSocketOffset = FVector(0, 0, 0);
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
 	FVector FlightSocketOffset = FVector(0, 0, 20);
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	float AimingArmLength = 200;
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	float DefaultArmLength = 300;
 
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
 	float LagLerpSpeed = 20;
@@ -168,10 +150,6 @@ private:
 	void ResetLandingEventDoOnce();
 	void DoSuperheroLandingOnce();
 	void DoSoftLandingOnce();
-	void ResetCameraPosition();
-	void ResetLookAtLocation();
-	bool DidResetCameraPosition;
-	bool DidResetLookAtLocation;
 	bool DidSuperheroLanding;
 	bool DidSoftLanding;
 
@@ -204,7 +182,6 @@ public:
 	                                                  FRotator Rotation);
 
 	//Events
-	bool CheckCameraPosition();
 	void SetCameraFOVLerp();
 	void SetCameraLagLerp();
 
@@ -251,8 +228,6 @@ public:
 	//Utility
 	UFUNCTION(BlueprintCallable)
 	void LineTraceToTheUpVector(float VectorLength, bool& Hit, FHitResult& OutHit);
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-	FVector GetLookAtLocation();
 
 	//State
 	UFUNCTION(BlueprintCallable)
@@ -283,4 +258,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartFlight();
 	void StopFlight();
+	FVector GetFlightSocketOffset();
 };

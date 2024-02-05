@@ -58,6 +58,12 @@ protected:
 	virtual void CheckInputDirection();
 	void CheckGround();
 	void UpdateHUD();
+	void CheckHasMovementInput();
+	void UpdateCamera();
+	void ResetLookAtLocation();
+	virtual void ResetCameraPosition();
+	virtual void UpdateSpringArmSocketOffset();
+	virtual bool CheckCameraPosition();
 	bool CheckMovementMode(EMovementMode MovementMode);
 	FVector GetInputAngles(bool XY);
 	FVector2d MoveAxis;
@@ -70,6 +76,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hero/Widgets")
 	TSubclassOf<UUserWidget> CrosshairWidgetClass;
 
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	FVector DefaultLookAtLocationZ = FVector(0, 0, -2000);
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	FVector AimingSocketOffset = FVector(0, 100, 20);
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	FVector DefaultSocketOffset = FVector(0, 0, 0);
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	float AimingArmLength = 200;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	float DefaultArmLength = 300;
+
+	bool DidResetCameraPosition;
+	bool DidResetLookAtLocation;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -81,19 +105,19 @@ public:
 	virtual void SetupActions(UEnhancedInputComponent* EnhancedInputComponent);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* MoveAction;
+	const UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* LookAction;
+	const UInputAction* LookAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* JumpAction;
+	const UInputAction* JumpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* DodgeAction;
+	const UInputAction* DodgeAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* SprintAction;
+	const UInputAction* SprintAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* AimAction;
+	const UInputAction* AimAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* TargetLockAction;
+	const UInputAction* TargetLockAction;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Hero/Enhanced Input")
-	UInputAction* StrikeAction;
+	const UInputAction* StrikeAction;
 };

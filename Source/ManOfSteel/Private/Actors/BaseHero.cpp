@@ -27,6 +27,8 @@ ABaseHero::ABaseHero() {
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bPushForceScaledToMass = true;
 	bUseControllerRotationYaw = false;
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -100));
+	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -35,12 +37,97 @@ void ABaseHero::BeginPlay() {
 	Super::BeginPlay();
 }
 
+void ABaseHero::CheckHasMovementInput() {
+	const FVector LastInputVector = GetMovementComponent()->GetLastInputVector();
+	Stats->SetHasMovementInput(UKismetMathLibrary::NotEqual_VectorVector(LastInputVector, FVector::Zero(), 0.01));
+}
+
+bool ABaseHero::CheckCameraPosition() {
+	const bool NearlyEqualToArmLength = UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength,
+		Stats->GetIsAiming()
+			? AimingArmLength
+			: DefaultArmLength,
+		0.1);
+
+	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
+	const bool IsEqualToSocket = UKismetMathLibrary::EqualEqual_VectorVector(
+		SpringArm->SocketOffset, TargetSocket,
+		0.1f);
+	return NearlyEqualToArmLength && IsEqualToSocket;
+}
+
+void ABaseHero::UpdateSpringArmSocketOffset() {
+	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
+	SpringArm->SocketOffset = UKismetMathLibrary::VInterpTo(
+		SpringArm->SocketOffset, TargetSocket, GetWorld()->DeltaTimeSeconds, 4);
+}
+
+void ABaseHero::ResetCameraPosition() {
+	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
+	SpringArm->SocketOffset = TargetSocket;
+
+	const float TargetArmLength = Stats->GetIsAiming()
+		                              ? AimingArmLength
+		                              : DefaultArmLength;
+	SpringArm->TargetArmLength = TargetArmLength;
+	DidResetCameraPosition = true;
+}
+
+void ABaseHero::UpdateCamera() {
+	//Setting the camera position when aiming
+	if (CheckCameraPosition()) {
+		//Reset camera position.
+		if (!DidResetCameraPosition) {
+			ResetCameraPosition();
+		}
+	}
+	else {
+		UpdateSpringArmSocketOffset();
+		const float TargetArmLength = Stats->GetIsAiming()
+			                              ? AimingArmLength
+			                              : DefaultArmLength;
+		SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(
+			SpringArm->TargetArmLength, TargetArmLength, GetWorld()->DeltaTimeSeconds, 4);
+		DidResetCameraPosition = false;
+	}
+
+	//"Look at Location" setting during aiming
+	const FVector Location = GetActorLocation();
+	const FVector CharacterForward = GetActorForwardVector();
+	const FVector AdjustedForward = Location + DefaultLookAtLocationZ + (CharacterForward * 5000);
+	const FVector SocketLocation = GetMesh()->GetSocketLocation(FName("head"));
+	const FVector CameraForward = Camera->GetForwardVector();
+	const FVector AdjustedSocket = SocketLocation + (CameraForward * 5000);
+
+	const FVector TargetForward = Stats->GetIsAiming() ? AdjustedSocket : AdjustedForward;
+	if (UKismetMathLibrary::EqualEqual_VectorVector(Stats->GetLookAtLocation(), TargetForward, 0.01)) {
+		if (!DidResetLookAtLocation) {
+			ResetLookAtLocation();
+		}
+	}
+	else {
+		Stats->SetLookAtLocation(TargetForward);
+		DidResetLookAtLocation = false;
+	}
+}
+
+
+void ABaseHero::ResetLookAtLocation() {
+	const FVector Location = GetActorLocation();
+	const FVector CharacterForward = GetActorForwardVector();
+	const FVector AdjustedForward = Location + DefaultLookAtLocationZ + (CharacterForward * 5000);
+	Stats->SetLookAtLocation(AdjustedForward);
+	DidResetLookAtLocation = true;
+}
+
 // Called every frame
 void ABaseHero::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 	CheckGround();
 	UpdateHUD();
+	CheckHasMovementInput();
 	CheckInputDirection();
+	UpdateCamera();
 	Combat->MoveAxis = MoveAxis;
 	Combat->Update(DeltaTime);
 	TargetLock->Update(DeltaTime);

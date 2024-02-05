@@ -44,6 +44,7 @@ private:
 	bool IsDodging;
 	bool HasMovementInput;
 	void SetIsSprint(bool Value);
+	FVector LookAtLocation;
 
 public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
@@ -72,6 +73,10 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool GetHasMovementInput();
 	void SetHasMovementInput(bool Value);
+
+	UFUNCTION(BlueprintPure, BlueprintCallable)
+	FVector GetLookAtLocation();
+	void SetLookAtLocation(FVector Value);
 	void SetCollisionHeight(EMovementMode TargetMovementMode);
 	bool CheckMovementMode(EMovementMode MovementMode);
 	void SetMovementMode(EMovementMode MovementMode);

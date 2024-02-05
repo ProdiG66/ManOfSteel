@@ -70,6 +70,11 @@ protected:
 	void DescendCompleted();
 	void FlyToggleStarted();
 
+
+	virtual void ResetCameraPosition() override;
+	virtual void UpdateSpringArmSocketOffset() override;
+	virtual bool CheckCameraPosition() override;
+
 	void FastFlightMoveCharacter();
 
 	void FlyUp();
