@@ -30,7 +30,7 @@ void USmearVFX::Update(float DeltaTime, bool IsOn, float TargetAmount) {
 	for (const TWeakObjectPtr<UMaterialInstanceDynamic> MaterialInstancePtr : MaterialInstances) {
 		if (UMaterialInstanceDynamic* MaterialInstance = MaterialInstancePtr.Get()) {
 			if (Combat->GetIsAttacking()) {
-				MaterialInstance->SetVectorParameterValue("SmearLocation", Character->GetActorForwardVector() * -1);
+				MaterialInstance->SetVectorParameterValue("SmearLocation", -Character->GetMesh()->GetForwardVector());
 			}
 			float SmearAmount;
 			if (MaterialInstance->GetScalarParameterValue(TEXT("SmearAmount"), SmearAmount)) {
