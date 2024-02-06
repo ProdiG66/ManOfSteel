@@ -37,14 +37,30 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SetIsAiming(bool Value);
+	virtual void SetIsSprint(bool Value);
+	bool IsSprint;
 
 private:
-	bool IsSprint;
 	bool IsAiming;
 	bool IsDodging;
 	bool HasMovementInput;
-	void SetIsSprint(bool Value);
 	FVector LookAtLocation;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	float LagLerpSpeed = 20;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	float FOVLerpSpeed = 20;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	bool UseCameraLag = true;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	bool UseCameraFOV = true;
+
+	float SavedLagSpeed = 15;
+	float SavedRotationLagSpeed = 15;
+	float SavedFOV = 20;
 
 public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
@@ -80,4 +96,18 @@ public:
 	void SetCollisionHeight(EMovementMode TargetMovementMode);
 	bool CheckMovementMode(EMovementMode MovementMode);
 	void SetMovementMode(EMovementMode MovementMode);
+
+	//Events
+	void SetCameraFOVLerp();
+	void SetCameraLagLerp();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCameraFOVEvent(float FOV, float FOVSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCameraLagEvent(float LagSpeed, float RotLagSpeed, float LagLerp);
+
+	UFUNCTION(BlueprintCallable)
+	void SetActiveComponent(bool UseActiveDelay, float DelayDuration, USceneComponent* Component, bool NewActive,
+	                        bool Reset);
 };

@@ -177,3 +177,68 @@ void UBaseStats::DodgeMovementInputDirection(EInputDirection InputDirection) {
 		CharacterMovement->AddInputVector(WorldVector * DodgeStrength, false);
 	}
 }
+
+void UBaseStats::SetCameraLagEvent(float LagSpeed, float RotLagSpeed, float LagLerp) {
+	if (UseCameraLag) {
+		SavedLagSpeed = LagSpeed;
+		SavedRotationLagSpeed = RotLagSpeed;
+		LagLerpSpeed = LagLerp;
+		SetCameraLagLerp();
+	}
+}
+
+void UBaseStats::SetCameraFOVEvent(float FOV, float FOVSpeed) {
+	if (UseCameraFOV) {
+		SavedFOV = FOV;
+		FOVLerpSpeed = FOVSpeed;
+		SetCameraFOVLerp();
+	}
+}
+
+void UBaseStats::SetCameraFOVLerp() {
+	if (!UKismetMathLibrary::NearlyEqual_FloatFloat(CameraComponent->FieldOfView, SavedFOV, 0.1)) {
+		CameraComponent->FieldOfView = UKismetMathLibrary::FInterpTo(CameraComponent->FieldOfView, SavedFOV,
+		                                                             GetWorld()->DeltaTimeSeconds, FOVLerpSpeed);
+		FTimerHandle TimerHandle;
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindLambda([&]() {
+			SetCameraFOVLerp();
+		});
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0, false);
+	}
+}
+
+void UBaseStats::SetCameraLagLerp() {
+	if (!UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArmComponent->CameraLagSpeed, SavedLagSpeed, 0.1)) {
+		SpringArmComponent->CameraLagSpeed = UKismetMathLibrary::FInterpTo(
+			SpringArmComponent->CameraLagSpeed, SavedLagSpeed,
+			GetWorld()->DeltaTimeSeconds, LagLerpSpeed);
+		SpringArmComponent->CameraRotationLagSpeed = UKismetMathLibrary::FInterpTo(
+			SpringArmComponent->CameraRotationLagSpeed, SavedRotationLagSpeed,
+			GetWorld()->DeltaTimeSeconds, LagLerpSpeed);
+		FTimerHandle TimerHandle;
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindLambda([&]() {
+			SetCameraLagLerp();
+		});
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0, false);
+	}
+}
+
+void UBaseStats::SetActiveComponent(bool UseActiveDelay, float DelayDuration, USceneComponent* Component,
+                                    bool NewActive,
+                                    bool Reset) {
+	if (IsValid(Component)) {
+		if (UseActiveDelay) {
+			FTimerHandle TimerHandle;
+			FTimerDelegate TimerDelegate;
+			TimerDelegate.BindLambda([&]() {
+				Component->SetActive(NewActive, Reset);
+			});
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0, false);
+		}
+		else {
+			Component->SetActive(NewActive, Reset);
+		}
+	}
+}

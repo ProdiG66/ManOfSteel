@@ -121,22 +121,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
 	FVector FlightSocketOffset = FVector(0, 0, 20);
 
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	float LagLerpSpeed = 20;
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	float FOVLerpSpeed = 20;
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	bool UseCameraLag = true;
-
-	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	bool UseCameraFOV = true;
-
-	float SavedLagSpeed = 15;
-	float SavedRotationLagSpeed = 15;
-	float SavedFOV = 20;
-
 	//State
 	bool IsSuperheroLanding;
 	bool IsFlying;
@@ -181,19 +165,6 @@ public:
 	                                                  UNiagaraSystem* SystemTemplate, FVector Location,
 	                                                  FRotator Rotation);
 
-	//Events
-	void SetCameraFOVLerp();
-	void SetCameraLagLerp();
-
-	UFUNCTION(BlueprintCallable)
-	void SetCameraFOVEvent(float FOV, float FOVSpeed);
-
-	UFUNCTION(BlueprintCallable)
-	void SetCameraLagEvent(float LagSpeed, float RotLagSpeed, float LagLerp);
-
-	UFUNCTION(BlueprintCallable)
-	void SetActiveComponent(bool UseActiveDelay, float DelayDuration, USceneComponent* Component, bool NewActive,
-	                        bool Reset);
 
 	//Lean
 	UFUNCTION(BlueprintPure, BlueprintCallable)
