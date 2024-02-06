@@ -18,15 +18,16 @@ void UAfterimageVFX::BeginPlay() {
 	Combat = Character->GetComponentByClass<UCombat>();
 }
 
-void UAfterimageVFX::Update(float DeltaTime) {
-	if (Combat->IsBeatdown || Combat->IsDashingToAttack) {
+void UAfterimageVFX::Update(float DeltaTime, bool IsOn) {
+	if ((Combat->IsBeatdown || Combat->IsDashingToAttack) || IsOn) {
 		if (IsStartAfterimage) {
 			IsStartAfterimage = false;
 			SpawnAfterimage();
 		}
 		else {
 			FTimerHandle TimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UAfterimageVFX::SpawnAfterimage, 0.03f, false);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UAfterimageVFX::SpawnAfterimage, SpawnRate,
+			                                       false);
 		}
 	}
 	else {
