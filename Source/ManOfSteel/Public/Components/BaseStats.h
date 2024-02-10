@@ -38,6 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 	void SetIsAiming(bool Value);
 	virtual void SetIsSprint(bool Value);
+	virtual bool OverrideStatus();
 	bool IsSprint;
 
 private:

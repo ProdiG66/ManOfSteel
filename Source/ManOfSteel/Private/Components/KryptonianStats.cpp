@@ -16,3 +16,7 @@ void UKryptonianStats::BeginPlay() {
 void UKryptonianStats::SetAimingEvent(bool Value) {
 	SetIsAiming(Value && !Flight->GetIsSuperheroLanding());
 }
+
+bool UKryptonianStats::OverrideStatus() {
+	return Flight->GetIsFlying() && GetIsSprint();
+}

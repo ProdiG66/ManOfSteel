@@ -82,11 +82,14 @@ void UFlight::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse
 		else {
 			const bool IsMovable = Hit.Component->Mobility == EComponentMobility::Movable;
 			if (!IsMovable) {
-				bool IsHit;
-				FHitResult OutHitResult;
-				LineTraceToTheUpVector(-1000, IsHit, OutHitResult);
-				if (!IsHit) {
-					GoUp = true;
+				UE_LOG(LogTemp, Warning, TEXT("Pitch: %f"), Character->GetControlRotation().Pitch);
+				if (Character->GetControlRotation().Pitch <= 90 || Character->GetControlRotation().Pitch >= 350) {
+					UE_LOG(LogTemp, Warning, TEXT("GoinUp"));
+					SetGoUp(true);
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("GoinDown"));
+					SetGoDown(true);
 				}
 			}
 		}
@@ -134,10 +137,39 @@ void UFlight::SetIsDescending(bool Value) {
 	IsDescending = Value;
 }
 
-bool UFlight::GetGoUp() { return GoUp; }
+bool UFlight::GetGoUp() {
+	return GoUp;
+}
 
 void UFlight::SetGoUp(bool Value) {
 	GoUp = Value;
+}
+
+bool UFlight::GetGoDown() {
+	return GoDown;
+}
+
+void UFlight::SetGoDown(bool Value) {
+	GoDown = Value;
+}
+
+void UFlight::AdjustFlight() {
+	if (GetGoUp()) {
+		if (Character->GetControlRotation().Pitch < 76) {
+			Character->AddControllerPitchInput(-10);
+		}
+		else {
+			SetGoUp(false);
+		}
+	}
+	if (GetGoDown()) {
+		if (Character->GetControlRotation().Pitch > 90 && Character->GetControlRotation().Pitch < 350) {
+			Character->AddControllerPitchInput(10);
+		}
+		else {
+			SetGoDown(false);
+		}
+	}
 }
 
 FVector UFlight::GetFlightSocketOffset() {

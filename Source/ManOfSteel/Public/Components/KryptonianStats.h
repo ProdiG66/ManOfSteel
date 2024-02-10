@@ -19,4 +19,5 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetAimingEvent(bool Value) override;
+	virtual bool OverrideStatus() override;
 };

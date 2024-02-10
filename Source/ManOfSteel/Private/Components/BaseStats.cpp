@@ -50,6 +50,10 @@ void UBaseStats::MontageStop(float Blend, UAnimMontage* Montage) {
 	AnimInstance->Montage_Stop(Blend, Montage);
 }
 
+bool UBaseStats::OverrideStatus() {
+	return false;
+}
+
 void UBaseStats::SetIsAiming(bool Value) {
 	// Set IsAiming flag
 	IsAiming = Value;
@@ -63,8 +67,14 @@ void UBaseStats::SetIsAiming(bool Value) {
 	CharacterMovement->bOrientRotationToMovement = Value ? (IsWalking || IsNotTargetLockedButFastFlying) : true;
 
 	// Update SpringArmComponent settings
-	SpringArmComponent->bEnableCameraLag = Value ? false : !TargetLock->IsTargetLock;
-	SpringArmComponent->bEnableCameraRotationLag = Value ? false : !TargetLock->IsTargetLock;
+	if (!TargetLock->IsTargetLock && !OverrideStatus()) {
+		SpringArmComponent->bEnableCameraLag = Value;
+		SpringArmComponent->bEnableCameraRotationLag = Value;
+	}
+	else {
+		SpringArmComponent->bEnableCameraLag = true;
+		SpringArmComponent->bEnableCameraRotationLag = true;
+	}
 }
 
 bool UBaseStats::CheckMovementMode(EMovementMode MovementMode) {

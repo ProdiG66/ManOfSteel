@@ -68,19 +68,8 @@ void ASuperman::Tick(float DeltaTime) {
 	const bool IsFastFlying = Flight->GetIsFlying() && Stats->GetIsSprint();
 	const float TargetAmount = IsFastFlying ? 300 : 100;
 	SmearVfx->Update(DeltaTime, EnableSmear, TargetAmount);
-	FlyUp();
+	Flight->AdjustFlight();
 	AfterimageVfx->Update(DeltaTime);
-}
-
-void ASuperman::FlyUp() {
-	if (Flight->GetGoUp()) {
-		if (GetActorRotation().Pitch < 76) {
-			AddControllerPitchInput(-10);
-		}
-		else {
-			Flight->SetGoUp(false);
-		}
-	}
 }
 
 void ASuperman::FastFlightMoveCharacter() {
@@ -255,47 +244,12 @@ void ASuperman::FlyToggleStarted() {
 	}
 }
 
-bool ASuperman::CheckCameraPosition() {
-	const bool NearlyEqualToArmLength = UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength,
-		Stats->GetIsAiming()
-			? AimingArmLength
-			: DefaultArmLength,
-		0.1);
-
-	const FVector TargetSocket = Stats->GetIsAiming()
-		                             ? AimingSocketOffset
-		                             : (Stats->CheckMovementMode(MOVE_Flying)
-			                                ? Flight->GetFlightSocketOffset()
-			                                : DefaultSocketOffset);
-	const bool IsEqualToSocket = UKismetMathLibrary::EqualEqual_VectorVector(
-		SpringArm->SocketOffset, TargetSocket,
-		0.1f);
-	return NearlyEqualToArmLength && IsEqualToSocket;
-}
-
-void ASuperman::UpdateSpringArmSocketOffset() {
-	const FVector TargetSocket = Stats->GetIsAiming()
-		                             ? AimingSocketOffset
-		                             : (Stats->CheckMovementMode(MOVE_Flying)
-			                                ? Flight->GetFlightSocketOffset()
-			                                : DefaultSocketOffset);
-	SpringArm->SocketOffset = UKismetMathLibrary::VInterpTo(
-		SpringArm->SocketOffset, TargetSocket, GetWorld()->DeltaTimeSeconds, 4);
-}
-
-void ASuperman::ResetCameraPosition() {
-	const FVector TargetSocket = Stats->GetIsAiming()
-		                             ? AimingSocketOffset
-		                             : (Stats->CheckMovementMode(MOVE_Flying)
-			                                ? Flight->GetFlightSocketOffset()
-			                                : DefaultSocketOffset);
-	SpringArm->SocketOffset = TargetSocket;
-
-	const float TargetArmLength = Stats->GetIsAiming()
-		                              ? AimingArmLength
-		                              : DefaultArmLength;
-	SpringArm->TargetArmLength = TargetArmLength;
-	DidResetCameraPosition = true;
+FVector ASuperman::TargetSocket() {
+	return Stats->GetIsAiming()
+		       ? AimingSocketOffset
+		       : (Stats->CheckMovementMode(MOVE_Flying)
+			          ? Flight->GetFlightSocketOffset()
+			          : (Stats->GetIsSprint() ? SprintSocketOffset : DefaultSocketOffset));
 }
 
 void ASuperman::CheckInputDirection() {

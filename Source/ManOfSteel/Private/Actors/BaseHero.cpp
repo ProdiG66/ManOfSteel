@@ -42,34 +42,36 @@ void ABaseHero::CheckHasMovementInput() {
 	Stats->SetHasMovementInput(UKismetMathLibrary::NotEqual_VectorVector(LastInputVector, FVector::Zero(), 0.01));
 }
 
-bool ABaseHero::CheckCameraPosition() {
-	const bool NearlyEqualToArmLength = UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength,
-		Stats->GetIsAiming()
-			? AimingArmLength
-			: DefaultArmLength,
-		0.1);
 
-	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
+FVector ABaseHero::TargetSocket() {
+	return Stats->GetIsAiming()
+		       ? AimingSocketOffset
+		       : (Stats->GetIsSprint() ? SprintSocketOffset : DefaultSocketOffset);
+}
+
+float ABaseHero::TargetArmLength() {
+	return Stats->GetIsAiming() ? AimingArmLength : DefaultArmLength;
+}
+
+bool ABaseHero::CheckCameraPosition() {
+	const bool NearlyEqualToArmLength = UKismetMathLibrary::NearlyEqual_FloatFloat(
+		SpringArm->TargetArmLength, TargetArmLength(), 0.01
+	);
+
 	const bool IsEqualToSocket = UKismetMathLibrary::EqualEqual_VectorVector(
-		SpringArm->SocketOffset, TargetSocket,
-		0.1f);
+		SpringArm->SocketOffset, TargetSocket(), 0.01
+	);
 	return NearlyEqualToArmLength && IsEqualToSocket;
 }
 
 void ABaseHero::UpdateSpringArmSocketOffset() {
-	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
 	SpringArm->SocketOffset = UKismetMathLibrary::VInterpTo(
-		SpringArm->SocketOffset, TargetSocket, GetWorld()->DeltaTimeSeconds, 4);
+		SpringArm->SocketOffset, TargetSocket(), GetWorld()->DeltaTimeSeconds, 4);
 }
 
 void ABaseHero::ResetCameraPosition() {
-	const FVector TargetSocket = Stats->GetIsAiming() ? AimingSocketOffset : DefaultSocketOffset;
-	SpringArm->SocketOffset = TargetSocket;
-
-	const float TargetArmLength = Stats->GetIsAiming()
-		                              ? AimingArmLength
-		                              : DefaultArmLength;
-	SpringArm->TargetArmLength = TargetArmLength;
+	SpringArm->SocketOffset = TargetSocket();
+	SpringArm->TargetArmLength = TargetArmLength();
 	DidResetCameraPosition = true;
 }
 
@@ -83,11 +85,8 @@ void ABaseHero::UpdateCamera() {
 	}
 	else {
 		UpdateSpringArmSocketOffset();
-		const float TargetArmLength = Stats->GetIsAiming()
-			                              ? AimingArmLength
-			                              : DefaultArmLength;
 		SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(
-			SpringArm->TargetArmLength, TargetArmLength, GetWorld()->DeltaTimeSeconds, 4);
+			SpringArm->TargetArmLength, TargetArmLength(), GetWorld()->DeltaTimeSeconds, 4);
 		DidResetCameraPosition = false;
 	}
 

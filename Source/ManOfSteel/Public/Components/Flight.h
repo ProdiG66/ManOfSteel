@@ -127,6 +127,7 @@ private:
 	bool IsAscending;
 	bool IsDescending;
 	bool GoUp;
+	bool GoDown;
 
 	void Land();
 
@@ -215,9 +216,12 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool GetIsDescending();
 	bool GetGoUp();
+	bool GetGoDown();
 	void SetIsAscending(bool Value);
 	void SetIsDescending(bool Value);
 	void SetGoUp(bool Value);
+	void SetGoDown(bool Value);
+	void AdjustFlight();
 
 	//CharacterMovement
 	void CheckFlightTime(float Delta);

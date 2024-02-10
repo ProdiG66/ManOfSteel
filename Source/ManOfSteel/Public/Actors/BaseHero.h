@@ -61,9 +61,9 @@ protected:
 	void CheckHasMovementInput();
 	void UpdateCamera();
 	void ResetLookAtLocation();
-	virtual void ResetCameraPosition();
-	virtual void UpdateSpringArmSocketOffset();
-	virtual bool CheckCameraPosition();
+	void ResetCameraPosition();
+	void UpdateSpringArmSocketOffset();
+	bool CheckCameraPosition();
 	bool CheckMovementMode(EMovementMode MovementMode);
 	FVector GetInputAngles(bool XY);
 	FVector2d MoveAxis;
@@ -76,6 +76,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hero/Widgets")
 	TSubclassOf<UUserWidget> CrosshairWidgetClass;
 
+	virtual FVector TargetSocket();
+	virtual float TargetArmLength();
+
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
 	FVector DefaultLookAtLocationZ = FVector(0, 0, -2000);
 
@@ -83,7 +86,10 @@ protected:
 	FVector AimingSocketOffset = FVector(0, 100, 20);
 
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
-	FVector DefaultSocketOffset = FVector(0, 0, 0);
+	FVector DefaultSocketOffset = FVector(160.0, 69, 30);
+
+	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
+	FVector SprintSocketOffset = FVector(60, 0, 10);
 
 	UPROPERTY(EditAnywhere, Category = "Camera Parameters")
 	float AimingArmLength = 200;
