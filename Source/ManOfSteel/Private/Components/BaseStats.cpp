@@ -242,10 +242,10 @@ void UBaseStats::SetActiveComponent(bool UseActiveDelay, float DelayDuration, US
 		if (UseActiveDelay) {
 			FTimerHandle TimerHandle;
 			FTimerDelegate TimerDelegate;
-			TimerDelegate.BindLambda([&]() {
+			TimerDelegate.BindLambda([=]() {
 				Component->SetActive(NewActive, Reset);
 			});
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0, false);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, DelayDuration, false);
 		}
 		else {
 			Component->SetActive(NewActive, Reset);
