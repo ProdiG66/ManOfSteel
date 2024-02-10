@@ -71,7 +71,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StartHitStop();
-	void BeginHitStop();
 	UAnimMontage* GetStrikeMontage();
 	void Strike();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
