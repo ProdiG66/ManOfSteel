@@ -5,7 +5,8 @@
 </span>
 
 Welcome to Man of Steel, an Unreal Engine prototype featuring Superman mechanics such as flight, heat vision, superhero landing, flight leaning, and basic combat. This project aims to showcase various aspects of Superman's abilities within a game environment.
-
+This Project has bypassed its GIT LFS limit. If you try to git clone this repo, most files will be corrupted (showing as 1kb)
+Tirelessly, I have manually downloaded EACH AND EVERY FILE in this repo. I have linked it [here]([url](https://drive.google.com/drive/folders/14PwzhlEHy4qlreV5Xz9G1188WJGYKPdM?usp=sharing))
 ## Screenshots
 <span>
 <img src="/Documentation/Heatvision.gif" width="460">
