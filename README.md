@@ -9,6 +9,7 @@ Welcome to Man of Steel, an Unreal Engine prototype featuring Superman mechanics
 This Project has bypassed its GIT LFS limit. If you try to git clone this repo, most files will be corrupted (showing as 1kb)
 
 Project Download: [GDrive](https://drive.google.com/drive/folders/14PwzhlEHy4qlreV5Xz9G1188WJGYKPdM?usp=sharing)
+Credits to and Maintained by: [Aaryan-Umar](https://github.com/Aaryan-Umar)
 
 ## Screenshots
 <span>
